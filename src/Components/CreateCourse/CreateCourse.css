@@ -1,0 +1,21 @@
+.box5{
+    border-style: solid;
+    border-color: green;
+    margin: 5px;
+}
+
+.box6{
+    padding: 15px;
+}
+
+.box7{
+    border-style: solid;
+    border-color: yellow;
+    margin: 5px 20px;
+}
+
+.box8{
+    border-style: solid;
+    border-color: black;
+    margin: 5px 20px;
+}
