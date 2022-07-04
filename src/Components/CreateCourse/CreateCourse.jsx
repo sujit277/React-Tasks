@@ -4,13 +4,16 @@ import Input from '../../Common/Input/Input';
 import Header from '../Header/Header';
 import AuthorItem from './Components/AuthorItem/AuthorItem';
 import './CreateCourse.css';
-import { mockedAuthorsList } from '../../Constants.js';
+import {
+	mockedAuthorsList,
+	CreateAuthor,
+	CreateCourseBtn,
+} from '../../Constants.js';
 
-function Author(item) {
-	return <AuthorItem name={item.name} id={item.id} key={item.id} />;
-}
-
-function CreateCourse() {
+const CreateCourse = () => {
+	const Author = (item) => {
+		return <AuthorItem name={item.name} id={item.id} key={item.id} />;
+	};
 	return (
 		<>
 			<Header />
@@ -26,7 +29,7 @@ function CreateCourse() {
 					</div>
 					<div className='col-6 mt-3'>
 						<div style={{ float: 'right', marginTop: '45px' }}>
-							<Button text='Create Course' />
+							<Button text={CreateCourseBtn} cls={'btn btn-light'} />
 						</div>
 					</div>
 					<label htmlFor='description' className='htmlForm-label'>
@@ -38,7 +41,7 @@ function CreateCourse() {
 								className='htmlForm-control'
 								placeholder='Enter Description'
 								id='description'
-								style={{ height: '100px' }}
+								style={{ height: '100px', width: '100%' }}
 							/>
 						</div>
 					</div>
@@ -56,7 +59,7 @@ function CreateCourse() {
 							width='50%'
 						/>
 						<div className='mt-4' style={{ textAlign: 'center' }}>
-							<Button text='Create Author' />
+							<Button text={CreateAuthor} cls={'btn btn-light'} />
 						</div>
 
 						<h4 style={{ textAlign: 'center', marginTop: '90px' }}>Duration</h4>
@@ -85,6 +88,6 @@ function CreateCourse() {
 			</div>
 		</>
 	);
-}
+};
 
 export default CreateCourse;

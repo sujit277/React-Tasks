@@ -48,7 +48,10 @@ export const mockedAuthorsList = [
 	},
 ];
 
-export const ShowCourse = 'Search Course';
+export const ShowCourse = 'Show Course';
 export const Search = 'Search';
 export const AddNewCourse = 'Add New Course';
 export const Logout = 'Logout';
+export const CreateAuthor = 'Create Author';
+export const CreateCourseBtn = 'Create Course';
+export const AddAuthor = 'Add Author';
