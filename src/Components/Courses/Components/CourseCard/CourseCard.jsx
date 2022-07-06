@@ -4,9 +4,19 @@ import Button from '../../../../Common/Button/Button';
 import { ShowCourse, mockedAuthorsList } from '../../../../Constants';
 import timeConvert from '../../../../Helpers/getCourseDuration';
 import convertDate from '../../../../Helpers/formatCreationDate';
+import { useNavigate } from 'react-router-dom';
 
-function CourseCard({ duration, creationDate, authors, title, description }) {
-	function findAuthors(authors, authorsList) {
+const CourseCard = ({
+	id,
+	duration,
+	creationDate,
+	authors,
+	title,
+	description,
+}) => {
+	const navigate = useNavigate();
+
+	const findAuthors = (authors, authorsList) => {
 		let text = '';
 		for (let i = 0; i < authors.length; i += 1) {
 			for (let j = 0; j < authorsList.length; j += 1) {
@@ -16,7 +26,7 @@ function CourseCard({ duration, creationDate, authors, title, description }) {
 			}
 		}
 		return text;
-	}
+	};
 
 	const hrsvalue = timeConvert(duration);
 	const datevalue = convertDate(creationDate);
@@ -42,11 +52,17 @@ function CourseCard({ duration, creationDate, authors, title, description }) {
 					<span style={{ paddingLeft: '10px' }}>{datevalue}</span>
 				</h5>
 				<div style={{ paddingLeft: '100px', marginBottom: '40px' }}>
-					<Button text={ShowCourse} />
+					<Button
+						text={ShowCourse}
+						cls={'btn btn-light'}
+						click={() => {
+							navigate(`/courseInfo/${id}`);
+						}}
+					/>
 				</div>
 			</div>
 		</div>
 	);
-}
+};
 
 export default CourseCard;
