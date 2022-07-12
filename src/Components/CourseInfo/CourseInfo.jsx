@@ -1,26 +1,29 @@
 import { React, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { mockedCoursesList } from '../../Constants';
-import { mockedAuthorsList } from '../../Constants';
+import { useSelector, useDispatch } from 'react-redux/es/exports';
 import timeConvert from '../../Helpers/getCourseDuration';
 import convertDate from '../../Helpers/formatCreationDate';
 import Button from '../../Common/Button/Button';
+import { getCourses } from '../../Store/Courses/actions';
+import { getAuthors } from '../../Store/Authors/actions';
 
 const CourseInfo = () => {
-	const { Id } = useParams();
+	const course = useSelector((state) => state.findAllCourses);
+	const dataAuthor = useSelector((state) => state.findAllAuthors);
+	const [CourseList, setCourseList] = useState([]);
+	const [listAuthor, setListAuthor] = useState();
 	const [data, setData] = useState();
+	const { Id } = useParams();
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	useEffect(() => {
-		function findCoursebyId() {
-			for (let i = 0; i < mockedCoursesList.length; i += 1) {
-				if (mockedCoursesList[i].id === Id) {
-					setData(mockedCoursesList[i]);
-				}
-			}
-		}
-		findCoursebyId();
-	}, [Id, data]);
+		dispatch(getCourses());
+		setCourseList(course);
+		setData(CourseList.filter((item) => item.id === Id)[0]);
+		dispatch(getAuthors());
+		setListAuthor(dataAuthor);
+	}, [CourseList, Id, course, dataAuthor, dispatch]);
 
 	const findAuthors = (authors, authorsList) => {
 		let text = '';
@@ -36,7 +39,7 @@ const CourseInfo = () => {
 
 	const hrsvalue = timeConvert(data?.duration);
 	const datevalue = convertDate(data?.creationDate);
-	const authorvalue = findAuthors(data?.authors, mockedAuthorsList);
+	const authorvalue = findAuthors(data?.authors, listAuthor);
 
 	return (
 		<>
@@ -52,7 +55,7 @@ const CourseInfo = () => {
 							text={'Back to Courses'}
 							cls={'btn btn-light'}
 							click={() => {
-								navigate('/');
+								navigate('/courses');
 							}}
 						/>
 					</div>

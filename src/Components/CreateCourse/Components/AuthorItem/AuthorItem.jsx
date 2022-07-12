@@ -1,18 +1,22 @@
 import React from 'react';
 import Button from '../../../../Common/Button/Button';
-import { AddAuthor } from '../../../../Constants';
 
-function AuthorItem(props) {
+const AuthorItem = (props) => {
 	return (
 		<div className='row mt-3'>
 			<div className='col' style={{ paddingLeft: '50px' }}>
 				<h5 style={{ float: 'left' }}>{props.name}</h5>
 				<div style={{ float: 'right', paddingRight: '80px' }}>
-					<Button text={AddAuthor} cls={'btn btn-light'} />
+					<Button
+						text={props.text}
+						cls={'btn btn-light'}
+						click={props.buttonFunction}
+						id={props.id}
+					/>
 				</div>
 			</div>
 		</div>
 	);
-}
+};
 
-export default AuthorItem;
+export default React.memo(AuthorItem);

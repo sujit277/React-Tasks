@@ -1,11 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../../../Common/Button/Button';
-import './SearchBar.css';
 import { Search, AddNewCourse } from '../../../../Constants';
 import Input from '../../../../Common/Input/Input';
-import { useNavigate } from 'react-router-dom';
 
-function SearchBar(props) {
+const SearchBar = (props) => {
 	const navigate = useNavigate();
 	return (
 		<div className='row mt-3 mb-3'>
@@ -31,6 +30,6 @@ function SearchBar(props) {
 			</div>
 		</div>
 	);
-}
+};
 
-export default SearchBar;
+export default React.memo(SearchBar);

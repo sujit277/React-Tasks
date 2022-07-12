@@ -1,10 +1,13 @@
 import React from 'react';
-import './CourseCard.css';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import Button from '../../../../Common/Button/Button';
-import { ShowCourse, mockedAuthorsList } from '../../../../Constants';
+import { ShowCourse } from '../../../../Constants';
 import timeConvert from '../../../../Helpers/getCourseDuration';
 import convertDate from '../../../../Helpers/formatCreationDate';
-import { useNavigate } from 'react-router-dom';
+import { getAuthors } from '../../../../Store/Authors/actions';
+import './CourseCard.css';
 
 const CourseCard = ({
 	id,
@@ -14,12 +17,20 @@ const CourseCard = ({
 	title,
 	description,
 }) => {
+	const data = useSelector((state) => state.findAllAuthors);
+	const [listAuthor, setListAuthor] = useState();
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(getAuthors());
+		setListAuthor(data);
+	}, [data, dispatch]);
 
 	const findAuthors = (authors, authorsList) => {
 		let text = '';
-		for (let i = 0; i < authors.length; i += 1) {
-			for (let j = 0; j < authorsList.length; j += 1) {
+		for (let i = 0; i < authors?.length; i += 1) {
+			for (let j = 0; j < authorsList?.length; j += 1) {
 				if (authors[i] === authorsList[j].id) {
 					text = `${text} ${authorsList[j].name}`;
 				}
@@ -30,7 +41,7 @@ const CourseCard = ({
 
 	const hrsvalue = timeConvert(duration);
 	const datevalue = convertDate(creationDate);
-	const authorvalue = findAuthors(authors, mockedAuthorsList);
+	const authorvalue = findAuthors(authors, listAuthor);
 
 	return (
 		<div className='row box2 mt-3 mb-3'>
@@ -65,4 +76,4 @@ const CourseCard = ({
 	);
 };
 
-export default CourseCard;
+export default React.memo(CourseCard);

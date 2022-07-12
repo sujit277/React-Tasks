@@ -1,8 +1,8 @@
 import { React, useState } from 'react';
-import Button from '../../Common/Button/Button';
-import Input from '../../Common/Input/Input';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Button from '../../Common/Button/Button';
+import Input from '../../Common/Input/Input';
 
 const Login = () => {
 	const [Data, setData] = useState({
@@ -12,25 +12,18 @@ const Login = () => {
 	const navigate = useNavigate();
 
 	const handleInput = (event) => {
-		const name = event.target.name;
-		const value = event.target.value;
-		console.log(value);
-		console.log(name);
-		console.log(Data);
-		setData({ ...Data, [name]: value });
+		setData({ ...Data, [event.target.name]: event.target.value });
 	};
 
 	const login = () => {
-		console.log(Data);
 		axios.post('http://localhost:4000/login', Data).then((res) => {
 			console.log(res.data);
 			if (res.data.successful === true) {
 				alert('User Logined Successfully');
-				console.log(res.data.user.name);
 				localStorage.setItem('User', res.data.user.name);
 				navigate('/courses');
 			} else {
-				window.location.reload();
+				navigate('/');
 			}
 		});
 	};

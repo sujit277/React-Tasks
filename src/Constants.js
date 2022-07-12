@@ -48,6 +48,13 @@ export const mockedAuthorsList = [
 	},
 ];
 
+export const addToCourse = (item) => {
+	mockedCoursesList.push(item);
+};
+export const addtoAuthors = (item) => {
+	mockedAuthorsList.push(item);
+};
+
 export const ShowCourse = 'Show Course';
 export const Search = 'Search';
 export const AddNewCourse = 'Add New Course';

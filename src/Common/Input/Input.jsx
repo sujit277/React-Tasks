@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Input(props) {
+const Input = (props) => {
 	return (
 		<input
 			type='text'
@@ -13,6 +13,6 @@ function Input(props) {
 			onChange={props.onChange}
 		/>
 	);
-}
+};
 
-export default Input;
+export default React.memo(Input);
