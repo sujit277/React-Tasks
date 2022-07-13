@@ -11,17 +11,13 @@ import Header from '../Header/Header';
 import AuthorItem from './Components/AuthorItem/AuthorItem';
 import Duration from './Components/Duration/Duration';
 import timeConvert from '../../Helpers/getCourseDuration';
-import {
-	CreateAuthor,
-	CreateCourseBtn,
-	addToCourse,
-	addtoAuthors,
-} from '../../Constants.js';
+import { CreateAuthor, CreateCourseBtn } from '../../Constants.js';
+import { AddCourse } from '../../Store/Courses/actions';
+import { AddAuthors } from '../../Store/Authors/actions';
 import './CreateCourse.css';
-import { getAuthors } from '../../Store/Authors/actions';
 
 const CreateCourse = () => {
-	const data = useSelector((state) => state.findAllAuthors);
+	const data = useSelector((state) => state.authorReducer);
 	const [durationInHrs, setDurationInHrs] = useState(0);
 	const [availableAuthors, setAvailableAuthors] = useState([]);
 	const [selectedAuthor, setSelectedAuthor] = useState([]);
@@ -41,7 +37,6 @@ const CreateCourse = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(getAuthors());
 		setAvailableAuthors(data);
 		let date = new Date();
 		let authId = [];
@@ -81,7 +76,7 @@ const CreateCourse = () => {
 		});
 	};
 
-	const createCourseClick = () => {
+	const createCourseFunction = () => {
 		console.log(courseDetails);
 		if (
 			courseDetails.title === '' ||
@@ -92,14 +87,15 @@ const CreateCourse = () => {
 		) {
 			alert('Please! fil in all fields');
 		} else {
-			addToCourse(courseDetails);
+			dispatch(AddCourse(courseDetails));
+			console.log('Done');
 			navigate('/courses');
 		}
 	};
 
 	const addNewAuthor = () => {
 		if (authorDetail.name !== '') {
-			addtoAuthors(authorDetail);
+			dispatch(AddAuthors(authorDetail));
 			setAvailableAuthors(
 				data.filter((item) => !selectedAuthor.includes(item))
 			);
@@ -107,7 +103,7 @@ const CreateCourse = () => {
 		}
 	};
 
-	const handleCourseDetailsChange = (e) => {
+	const handleCourseDetails = (e) => {
 		setCourseDetails({
 			...courseDetails,
 			[e.target.name]: e.target.value,
@@ -117,7 +113,7 @@ const CreateCourse = () => {
 		}
 	};
 
-	const handleAuthorDetailChange = (e) => {
+	const handleAuthorDetails = (e) => {
 		setAuthorDetail({ name: e.target.value, id: uuidv4() });
 	};
 
@@ -135,7 +131,7 @@ const CreateCourse = () => {
 								placeholder='Enter Title'
 								name='title'
 								id='title'
-								onChange={handleCourseDetailsChange}
+								onChange={handleCourseDetails}
 							/>
 						</div>
 					</div>
@@ -144,7 +140,7 @@ const CreateCourse = () => {
 							<Button
 								text={CreateCourseBtn}
 								cls={'btn btn-light'}
-								click={createCourseClick}
+								click={createCourseFunction}
 							/>
 						</div>
 					</div>
@@ -159,7 +155,7 @@ const CreateCourse = () => {
 								id='description'
 								name='description'
 								style={{ height: '100px', width: '100%' }}
-								onChange={handleCourseDetailsChange}
+								onChange={handleCourseDetails}
 							/>
 						</div>
 					</div>
@@ -175,7 +171,7 @@ const CreateCourse = () => {
 							name='name'
 							id='name'
 							width='50%'
-							onChange={handleAuthorDetailChange}
+							onChange={handleAuthorDetails}
 						/>
 						<div className='mt-4' style={{ textAlign: 'center' }}>
 							<Button
@@ -185,7 +181,7 @@ const CreateCourse = () => {
 							/>
 						</div>
 						<Duration
-							handleCourseDetailsChange={handleCourseDetailsChange}
+							handleCourseDetailsChange={handleCourseDetails}
 							courseDetails={courseDetails}
 							durationInHrs={durationInHrs}
 						/>

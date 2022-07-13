@@ -1,8 +1,14 @@
-import { getAllCourses } from '../services';
+import { addToCourse, deleteCourse, getAllCourses } from '../../services';
 
-const intialState = [];
-const findAllCourses = (state = intialState, action) => {
-	if (action.type === 'GETALLCOURSES') {
+const intialState = getAllCourses();
+
+const courseReducer = (state = intialState, action) => {
+	if (action.type === 'ADDCOURSE') {
+		addToCourse(action.payload);
+		state = getAllCourses();
+		return state;
+	} else if (action.type === 'DELCOURSE') {
+		deleteCourse(action.payload);
 		state = getAllCourses();
 		return state;
 	} else {
@@ -10,4 +16,4 @@ const findAllCourses = (state = intialState, action) => {
 	}
 };
 
-export default findAllCourses;
+export default courseReducer;

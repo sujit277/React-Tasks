@@ -48,13 +48,6 @@ export const mockedAuthorsList = [
 	},
 ];
 
-export const addToCourse = (item) => {
-	mockedCoursesList.push(item);
-};
-export const addtoAuthors = (item) => {
-	mockedAuthorsList.push(item);
-};
-
 export const ShowCourse = 'Show Course';
 export const Search = 'Search';
 export const AddNewCourse = 'Add New Course';
@@ -62,3 +55,5 @@ export const Logout = 'Logout';
 export const CreateAuthor = 'Create Author';
 export const CreateCourseBtn = 'Create Course';
 export const AddAuthor = 'Add Author';
+export const deletebtn = <i className='bi bi-trash'></i>;
+export const updatebtn = <i className='bi bi-pencil'></i>;

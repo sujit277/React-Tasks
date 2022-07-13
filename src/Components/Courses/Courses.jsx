@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import CourseCard from './Components/CourseCard/CourseCard';
 import SearchBar from './Components/SearchBar/SearchBar';
-import { getCourses } from '../../Store/Courses/actions';
 import Header from '../Header/Header';
 import './Courses.css';
 
 const Courses = () => {
-	const course = useSelector((state) => state.findAllCourses);
+	const course = useSelector((state) => state.courseReducer);
+	const loginData = useSelector((state) => state.userDataReducer);
 	const [CourseList, setCourseList] = useState([]);
 	const [Data, setData] = useState({
 		filterword: '',
@@ -17,12 +17,11 @@ const Courses = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (localStorage.getItem('User') === 'Non') {
+		if (loginData.isAuth === false) {
 			navigate('/');
 		}
-		dispatch(getCourses());
 		setCourseList(course);
-	}, [course, dispatch, navigate]);
+	}, [course, dispatch, loginData, navigate]);
 
 	const handleInput = (event) => {
 		setData({ ...Data, [event.target.name]: event.target.value });

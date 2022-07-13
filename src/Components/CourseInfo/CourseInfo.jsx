@@ -4,42 +4,23 @@ import { useSelector, useDispatch } from 'react-redux/es/exports';
 import timeConvert from '../../Helpers/getCourseDuration';
 import convertDate from '../../Helpers/formatCreationDate';
 import Button from '../../Common/Button/Button';
-import { getCourses } from '../../Store/Courses/actions';
-import { getAuthors } from '../../Store/Authors/actions';
+import { findAuthors } from './util';
 
 const CourseInfo = () => {
-	const course = useSelector((state) => state.findAllCourses);
-	const dataAuthor = useSelector((state) => state.findAllAuthors);
-	const [CourseList, setCourseList] = useState([]);
-	const [listAuthor, setListAuthor] = useState();
+	const course = useSelector((state) => state.courseReducer);
+	const dataAuthor = useSelector((state) => state.authorReducer);
 	const [data, setData] = useState();
 	const { Id } = useParams();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(getCourses());
-		setCourseList(course);
-		setData(CourseList.filter((item) => item.id === Id)[0]);
-		dispatch(getAuthors());
-		setListAuthor(dataAuthor);
-	}, [CourseList, Id, course, dataAuthor, dispatch]);
-
-	const findAuthors = (authors, authorsList) => {
-		let text = '';
-		for (let i = 0; i < authors?.length; i += 1) {
-			for (let j = 0; j < authorsList?.length; j += 1) {
-				if (authors[i] === authorsList[j].id) {
-					text = `${text} ${authorsList[j].name}`;
-				}
-			}
-		}
-		return text;
-	};
+		setData(course.filter((item) => item.id === Id)[0]);
+	}, [Id, course, dataAuthor, dispatch]);
 
 	const hrsvalue = timeConvert(data?.duration);
 	const datevalue = convertDate(data?.creationDate);
-	const authorvalue = findAuthors(data?.authors, listAuthor);
+	const authorvalue = findAuthors(data?.authors, dataAuthor);
 
 	return (
 		<>

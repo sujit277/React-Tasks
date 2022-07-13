@@ -1,7 +1,8 @@
-import { gaa } from './types';
+import { addAuth } from './types';
 
-export const getAuthors = () => {
+export const AddAuthors = (data) => {
 	return {
-		type: gaa,
+		type: addAuth,
+		payload: data,
 	};
 };

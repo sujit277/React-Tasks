@@ -1,7 +1,15 @@
-import { gac } from './types';
+import { addcrse, delcrse } from './types';
 
-export const getCourses = () => {
+export const delCourse = (Id) => {
 	return {
-		type: gac,
+		type: delcrse,
+		payload: Id,
+	};
+};
+
+export const AddCourse = (courseData) => {
+	return {
+		type: addcrse,
+		payload: courseData,
 	};
 };

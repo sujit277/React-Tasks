@@ -1,8 +1,10 @@
-import { getAllAuthors } from '../services';
+import { addtoAuthors, getAllAuthors } from '../../services';
 
-const intialState = [];
-const findAllAuthors = (state = intialState, action) => {
-	if (action.type === 'GETALLAUTHORS') {
+const intialState = getAllAuthors();
+
+const authorReducer = (state = intialState, action) => {
+	if (action.type === 'ADDAUTHORS') {
+		addtoAuthors(action.payload);
 		state = getAllAuthors();
 		return state;
 	} else {
@@ -10,4 +12,4 @@ const findAllAuthors = (state = intialState, action) => {
 	}
 };
 
-export default findAllAuthors;
+export default authorReducer;

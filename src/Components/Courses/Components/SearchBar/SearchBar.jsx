@@ -6,6 +6,7 @@ import Input from '../../../../Common/Input/Input';
 
 const SearchBar = (props) => {
 	const navigate = useNavigate();
+
 	return (
 		<div className='row mt-3 mb-3'>
 			<div className='col-7' style={{ display: 'flex' }}>

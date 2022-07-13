@@ -1,1 +1,4 @@
-export const gac = 'GETALLCOURSES';
+const delcrse = 'DELCOURSE';
+const addcrse = 'ADDCOURSE';
+
+export { delcrse, addcrse };

@@ -1,8 +1,10 @@
 import { React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import Button from '../../Common/Button/Button';
 import Input from '../../Common/Input/Input';
+import { addLoginData } from '../../Store/User/actions';
 
 const Login = () => {
 	const [Data, setData] = useState({
@@ -10,6 +12,7 @@ const Login = () => {
 		password: '',
 	});
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const handleInput = (event) => {
 		setData({ ...Data, [event.target.name]: event.target.value });
@@ -20,7 +23,13 @@ const Login = () => {
 			console.log(res.data);
 			if (res.data.successful === true) {
 				alert('User Logined Successfully');
-				localStorage.setItem('User', res.data.user.name);
+				const userdata = {
+					isAuth: true,
+					name: res.data.user.name,
+					email: res.data.user.email,
+					token: res.data.result,
+				};
+				dispatch(addLoginData(userdata));
 				navigate('/courses');
 			} else {
 				navigate('/');

@@ -1,1 +1,3 @@
-export const gaa = 'GETALLAUTHORS';
+const addAuth = 'ADDAUTHORS';
+
+export { addAuth };
