@@ -1,4 +1,4 @@
-function timeConvert(n) {
+const timeConvert = (n) => {
 	const num = n;
 	const hours = num / 60;
 	const rhours = Math.floor(hours);
@@ -16,6 +16,6 @@ function timeConvert(n) {
 	}
 
 	return `${rhours}:${rminutes} hours`;
-}
+};
 
 export default timeConvert;

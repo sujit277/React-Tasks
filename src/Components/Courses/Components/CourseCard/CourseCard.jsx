@@ -1,10 +1,13 @@
 import React from 'react';
-import './CourseCard.css';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../../../Common/Button/Button';
-import { ShowCourse, mockedAuthorsList } from '../../../../Constants';
+import { ShowCourse, updatebtn, deletebtn } from '../../../../Constants';
 import timeConvert from '../../../../Helpers/getCourseDuration';
 import convertDate from '../../../../Helpers/formatCreationDate';
-import { useNavigate } from 'react-router-dom';
+import { delCourse } from '../../../../Store/Courses/actions';
+import { findAuthors } from './util';
+import './CourseCard.css';
 
 const CourseCard = ({
 	id,
@@ -14,23 +17,13 @@ const CourseCard = ({
 	title,
 	description,
 }) => {
+	const data = useSelector((state) => state.authorReducer);
 	const navigate = useNavigate();
-
-	const findAuthors = (authors, authorsList) => {
-		let text = '';
-		for (let i = 0; i < authors.length; i += 1) {
-			for (let j = 0; j < authorsList.length; j += 1) {
-				if (authors[i] === authorsList[j].id) {
-					text = `${text} ${authorsList[j].name}`;
-				}
-			}
-		}
-		return text;
-	};
+	const dispatch = useDispatch();
 
 	const hrsvalue = timeConvert(duration);
 	const datevalue = convertDate(creationDate);
-	const authorvalue = findAuthors(authors, mockedAuthorsList);
+	const authorvalue = findAuthors(authors, data);
 
 	return (
 		<div className='row box2 mt-3 mb-3'>
@@ -54,15 +47,26 @@ const CourseCard = ({
 				<div style={{ paddingLeft: '100px', marginBottom: '40px' }}>
 					<Button
 						text={ShowCourse}
-						cls={'btn btn-light'}
+						cls={'btn btn-light mx-2'}
 						click={() => {
 							navigate(`/courseInfo/${id}`);
 						}}
 					/>
+					<Button
+						text={deletebtn}
+						cls={'btn btn-light mx-2'}
+						click={() => dispatch(delCourse(id))}
+					/>
+					<Button
+						text={updatebtn}
+						cls={'btn btn-light'}
+						click={() => dispatch(delCourse(id))}
+					/>
+					<i class='fa-solid fa-circle-trash'></i>
 				</div>
 			</div>
 		</div>
 	);
 };
 
-export default CourseCard;
+export default React.memo(CourseCard);

@@ -1,11 +1,11 @@
 import React from 'react';
 
-function Button(props) {
+const Button = (props) => {
 	return (
-		<button className={props.cls} onClick={props.click}>
+		<button className={props.cls} onClick={props.click} id={props.id}>
 			{props.text}
 		</button>
 	);
-}
+};
 
-export default Button;
+export default React.memo(Button);

@@ -1,30 +1,38 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import CourseCard from './Components/CourseCard/CourseCard';
-import { mockedCoursesList } from '../../Constants.js';
 import SearchBar from './Components/SearchBar/SearchBar';
+import Header from '../Header/Header';
 import './Courses.css';
 
 const Courses = () => {
+	const course = useSelector((state) => state.courseReducer);
+	const loginData = useSelector((state) => state.userDataReducer);
+	const [CourseList, setCourseList] = useState([]);
 	const [Data, setData] = useState({
 		filterword: '',
 	});
-	const [CourseList, setCourseList] = useState(mockedCoursesList);
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (loginData.isAuth === false) {
+			navigate('/');
+		}
+		setCourseList(course);
+	}, [course, dispatch, loginData, navigate]);
 
 	const handleInput = (event) => {
-		const name = event.target.name;
-		const value = event.target.value;
-		console.log(value);
-		console.log(name);
-		console.log(Data);
-		setData({ ...Data, [name]: value });
+		setData({ ...Data, [event.target.name]: event.target.value });
 	};
 
 	const filterCourse = () => {
 		setCourseList(
 			CourseList.filter((element) => {
 				if (
-					Data.filterword === element.title ||
-					Data.filterword === element.id
+					element.title.startsWith(Data.filterword) ||
+					element.id.startsWith(Data.filterword)
 				) {
 					var result = element;
 				}
@@ -32,30 +40,34 @@ const Courses = () => {
 			})
 		);
 	};
+
 	return (
-		<div className='row box3'>
-			<div className='col' style={{ padding: '5px 20px' }}>
-				<SearchBar
-					click={filterCourse}
-					onChange={(event) => {
-						handleInput(event);
-					}}
-					name={'filterword'}
-					id={'filterword'}
-				/>
-				{CourseList.map((item) => (
-					<CourseCard
-						id={item.id}
-						title={item.title}
-						description={item.description}
-						creationDate={item.creationDate}
-						duration={item.duration}
-						authors={item.authors}
-						key={item.id}
+		<>
+			<Header />
+			<div className='row box3'>
+				<div className='col' style={{ padding: '5px 20px' }}>
+					<SearchBar
+						click={filterCourse}
+						onChange={(event) => {
+							handleInput(event);
+						}}
+						name={'filterword'}
+						id={'filterword'}
 					/>
-				))}
+					{CourseList.map((item) => (
+						<CourseCard
+							id={item.id}
+							key={item.id}
+							title={item.title}
+							description={item.description}
+							creationDate={item.creationDate}
+							duration={item.duration}
+							authors={item.authors}
+						/>
+					))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

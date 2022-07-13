@@ -55,3 +55,5 @@ export const Logout = 'Logout';
 export const CreateAuthor = 'Create Author';
 export const CreateCourseBtn = 'Create Course';
 export const AddAuthor = 'Add Author';
+export const deletebtn = <i className='bi bi-trash'></i>;
+export const updatebtn = <i className='bi bi-pencil'></i>;

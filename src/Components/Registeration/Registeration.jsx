@@ -1,9 +1,9 @@
 import { React, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Input from '../../Common/Input/Input';
 import Button from '../../Common/Button/Button';
 import './Registeration.css';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 const Registeration = () => {
 	const [Data, setData] = useState({
@@ -30,7 +30,7 @@ const Registeration = () => {
 			if (res.data.successful === true) {
 				navigate('/');
 			} else {
-				window.location.reload();
+				navigate('/registeration');
 			}
 		});
 	};
