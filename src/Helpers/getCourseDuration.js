@@ -1,3 +1,5 @@
+//Method for converting time in minutes into hours
+
 const timeConvert = (n) => {
 	const num = n;
 	const hours = num / 60;

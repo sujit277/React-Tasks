@@ -1,26 +1,33 @@
 import { React, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux/es/exports';
+import { useDispatch, useSelector } from 'react-redux/es/exports';
 import timeConvert from '../../Helpers/getCourseDuration';
 import convertDate from '../../Helpers/formatCreationDate';
 import Button from '../../Common/Button/Button';
 import { findAuthors } from './util';
+import { getAuthor } from '../../Store/Authors/actions';
+import { getCourse } from '../../Store/Courses/actions';
 
 const CourseInfo = () => {
-	const course = useSelector((state) => state.courseReducer);
-	const dataAuthor = useSelector((state) => state.authorReducer);
-	const [data, setData] = useState();
-	const { Id } = useParams();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const { Id } = useParams();
+	const course = useSelector((state) => state.courseReducer);
+	const author = useSelector((state) => state.authorReducer);
+	const [courseDetails, setCourseDetails] = useState();
+
+	const hoursvalue = timeConvert(courseDetails?.duration);
+	const datevalue = convertDate(courseDetails?.creationDate);
+	const authorvalue = findAuthors(courseDetails?.authors, author);
 
 	useEffect(() => {
-		setData(course.filter((item) => item.id === Id)[0]);
-	}, [Id, course, dataAuthor, dispatch]);
-
-	const hrsvalue = timeConvert(data?.duration);
-	const datevalue = convertDate(data?.creationDate);
-	const authorvalue = findAuthors(data?.authors, dataAuthor);
+		dispatch(getAuthor());
+		dispatch(getCourse());
+		if (!localStorage.getItem('token')) {
+			navigate('/');
+		}
+		setCourseDetails(course.filter((item) => item.id === Id)[0]);
+	}, [Id, course, dispatch, navigate]);
 
 	return (
 		<>
@@ -40,10 +47,10 @@ const CourseInfo = () => {
 							}}
 						/>
 					</div>
-					<h1 style={{ textAlign: 'center' }}>{data?.title}</h1>
+					<h1 style={{ textAlign: 'center' }}>{courseDetails?.title}</h1>
 					<div className='col-7 mx-auto'>
 						<div style={{ textAlign: 'center', padding: '10px 80px' }}>
-							{data?.description}
+							{courseDetails?.description}
 						</div>
 					</div>
 					<div className='col-5'>
@@ -51,7 +58,7 @@ const CourseInfo = () => {
 							ID: <span>{Id}</span>
 						</h4>
 						<h4>
-							Duration: <span>{hrsvalue}</span>
+							Duration: <span>{hoursvalue}</span>
 						</h4>
 						<h4>
 							Created: <span>{datevalue}</span>

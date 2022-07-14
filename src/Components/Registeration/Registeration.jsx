@@ -1,12 +1,12 @@
 import { React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Input from '../../Common/Input/Input';
 import Button from '../../Common/Button/Button';
 import './Registeration.css';
+import { register } from '../../services';
 
 const Registeration = () => {
-	const [Data, setData] = useState({
+	const [formData, setFormData] = useState({
 		name: '',
 		email: '',
 		password: '',
@@ -14,25 +14,23 @@ const Registeration = () => {
 	const navigate = useNavigate();
 
 	const handleInput = (event) => {
-		const name = event.target.name;
-		const value = event.target.value;
-		console.log(value);
-		console.log(name);
-		console.log(Data);
-		setData({ ...Data, [name]: value });
+		setFormData({ ...formData, [event.target.name]: event.target.value });
 	};
 
-	const register = () => {
-		console.log(Data);
-		axios.post('http://localhost:4000/register', Data).then((res) => {
-			console.log(res.data);
-			alert('User Registered Successfully');
-			if (res.data.successful === true) {
-				navigate('/');
-			} else {
-				navigate('/registeration');
-			}
-		});
+	const submitRegister = (formData) => {
+		console.log(formData);
+		register(formData)
+			.then((res) => {
+				if (res.status === 201) {
+					alert('User Registered Successfully');
+					navigate('/');
+				} else {
+					navigate('/registeration');
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	};
 
 	return (
@@ -92,7 +90,9 @@ const Registeration = () => {
 							<Button
 								text='Registeration'
 								cls={'btn btn-light'}
-								click={register}
+								click={() => {
+									submitRegister(formData);
+								}}
 							/>
 						</div>
 						<div style={{ textAlign: 'center' }}>

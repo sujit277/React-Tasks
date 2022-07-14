@@ -1,8 +1,14 @@
-import { addAuth } from './types';
+import { ADDAUTHOR, GETAUTHOR } from './types';
 
-export const AddAuthors = (data) => {
+//Action for getting Author details
+export const getAuthor = () => {
+	return { type: GETAUTHOR };
+};
+
+//Action for adding new Author
+export const addAuthor = (data) => {
 	return {
-		type: addAuth,
+		type: ADDAUTHOR,
 		payload: data,
 	};
 };

@@ -1,6 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
@@ -12,14 +11,16 @@ import AuthorItem from './Components/AuthorItem/AuthorItem';
 import Duration from './Components/Duration/Duration';
 import timeConvert from '../../Helpers/getCourseDuration';
 import { CreateAuthor, CreateCourseBtn } from '../../Constants.js';
-import { AddCourse } from '../../Store/Courses/actions';
-import { AddAuthors } from '../../Store/Authors/actions';
+import { addCourse } from '../../Store/Courses/actions';
+import { addAuthor, getAuthor } from '../../Store/Authors/actions';
 import './CreateCourse.css';
 
 const CreateCourse = () => {
-	const data = useSelector((state) => state.authorReducer);
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const author = useSelector((state) => state.authorReducer);
 	const [durationInHrs, setDurationInHrs] = useState(0);
-	const [availableAuthors, setAvailableAuthors] = useState([]);
+	const [availableAuthors, setAvailableAuthors] = useState(author);
 	const [selectedAuthor, setSelectedAuthor] = useState([]);
 	const [courseDetails, setCourseDetails] = useState({
 		id: '',
@@ -33,51 +34,21 @@ const CreateCourse = () => {
 		name: '',
 		id: '',
 	});
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		setAvailableAuthors(data);
-		let date = new Date();
-		let authId = [];
-		selectedAuthor.map((item) => authId.push(item.id));
-		setCourseDetails((preval) => {
-			return {
-				...preval,
-				creationDate: `${date.getDate()}/${
-					date.getMonth() + 1
-				}/${date.getFullYear()}`,
-				authors: authId,
-				id: uuidv4(),
-			};
-		});
-	}, [data, dispatch, selectedAuthor]);
 
 	const selectAuthor = (e) => {
-		console.log(availableAuthors);
-		console.log(data);
 		let newAuthors = availableAuthors.filter((item) => item.id === e.target.id);
 		setSelectedAuthor((preval) => {
 			return [...preval, ...newAuthors];
 		});
-		console.log(selectedAuthor);
-		setAvailableAuthors((preval) => {
-			return preval.filter((item) => item.id !== e.target.id);
-		});
 	};
 
 	const deselectAuthors = (e) => {
-		let newAuthors = selectedAuthor.filter((item) => item.id === e.target.id);
-		setAvailableAuthors((preval) => {
-			return [...preval, ...newAuthors];
-		});
 		setSelectedAuthor((preval) => {
 			return preval.filter((item) => item.id !== e.target.id);
 		});
 	};
 
 	const createCourseFunction = () => {
-		console.log(courseDetails);
 		if (
 			courseDetails.title === '' ||
 			courseDetails.description === '' ||
@@ -87,17 +58,16 @@ const CreateCourse = () => {
 		) {
 			alert('Please! fil in all fields');
 		} else {
-			dispatch(AddCourse(courseDetails));
-			console.log('Done');
+			dispatch(addCourse(courseDetails));
 			navigate('/courses');
 		}
 	};
 
 	const addNewAuthor = () => {
 		if (authorDetail.name !== '') {
-			dispatch(AddAuthors(authorDetail));
+			dispatch(addAuthor(authorDetail));
 			setAvailableAuthors(
-				data.filter((item) => !selectedAuthor.includes(item))
+				author.filter((item) => !selectedAuthor.includes(item))
 			);
 			setAuthorDetail({ name: '', id: '' });
 		}
@@ -116,6 +86,26 @@ const CreateCourse = () => {
 	const handleAuthorDetails = (e) => {
 		setAuthorDetail({ name: e.target.value, id: uuidv4() });
 	};
+
+	useEffect(() => {
+		dispatch(getAuthor());
+		setAvailableAuthors(
+			author.filter((item) => !selectedAuthor.includes(item))
+		);
+		let date = new Date();
+		let authId = [];
+		selectedAuthor.map((item) => authId.push(item.id));
+		setCourseDetails((preval) => {
+			return {
+				...preval,
+				creationDate: `${date.getDate()}/${
+					date.getMonth() + 1
+				}/${date.getFullYear()}`,
+				authors: authId,
+				id: uuidv4(),
+			};
+		});
+	}, [author, dispatch, selectedAuthor]);
 
 	return (
 		<>
@@ -190,7 +180,7 @@ const CreateCourse = () => {
 						<h4 className='mb-3' style={{ textAlign: 'center' }}>
 							Authors
 						</h4>
-						{data.map((item) => {
+						{availableAuthors.map((item) => {
 							return (
 								<AuthorItem
 									name={item.name}

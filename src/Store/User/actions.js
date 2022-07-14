@@ -1,14 +1,14 @@
-import { addlogdata, dellogdata } from './types';
+import { ADDLOGINDATA, DELLOGINDATA } from './types';
 
 export const addLoginData = (data) => {
 	return {
-		type: addlogdata,
+		type: ADDLOGINDATA,
 		payload: data,
 	};
 };
 
 export const delLoginData = () => {
 	return {
-		type: dellogdata,
+		type: DELLOGINDATA,
 	};
 };

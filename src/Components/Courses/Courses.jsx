@@ -4,42 +4,42 @@ import { useDispatch, useSelector } from 'react-redux';
 import CourseCard from './Components/CourseCard/CourseCard';
 import SearchBar from './Components/SearchBar/SearchBar';
 import Header from '../Header/Header';
+import { getCourse } from '../../Store/Courses/actions';
 import './Courses.css';
 
 const Courses = () => {
-	const course = useSelector((state) => state.courseReducer);
-	const loginData = useSelector((state) => state.userDataReducer);
-	const [CourseList, setCourseList] = useState([]);
-	const [Data, setData] = useState({
-		filterword: '',
-	});
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-
-	useEffect(() => {
-		if (loginData.isAuth === false) {
-			navigate('/');
-		}
-		setCourseList(course);
-	}, [course, dispatch, loginData, navigate]);
+	const course = useSelector((state) => state.courseReducer);
+	const [CourseList, setCourseList] = useState(course);
+	const [searchWord, setSearchWord] = useState('');
 
 	const handleInput = (event) => {
-		setData({ ...Data, [event.target.name]: event.target.value });
+		setSearchWord(event.target.value);
 	};
 
 	const filterCourse = () => {
-		setCourseList(
-			CourseList.filter((element) => {
-				if (
-					element.title.startsWith(Data.filterword) ||
-					element.id.startsWith(Data.filterword)
-				) {
-					var result = element;
-				}
-				return result;
-			})
-		);
+		if (searchWord.length !== 0)
+			setCourseList(
+				course.filter(
+					(element) =>
+						element.title.startsWith(searchWord) ||
+						element.id.startsWith(searchWord)
+				)
+			);
+		if (searchWord.length === 0) {
+			console.log(course);
+			setCourseList(course);
+		}
 	};
+
+	useEffect(() => {
+		if (!localStorage.getItem('token')) {
+			navigate('/');
+		}
+		dispatch(getCourse());
+		setCourseList(course);
+	}, [course, dispatch, navigate]);
 
 	return (
 		<>
@@ -51,8 +51,8 @@ const Courses = () => {
 						onChange={(event) => {
 							handleInput(event);
 						}}
-						name={'filterword'}
-						id={'filterword'}
+						name={'searchWord'}
+						id={'searchWord'}
 					/>
 					{CourseList.map((item) => (
 						<CourseCard

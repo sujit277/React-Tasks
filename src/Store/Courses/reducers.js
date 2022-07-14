@@ -1,18 +1,23 @@
-import { addToCourse, deleteCourse, getAllCourses } from '../../services';
+import { getAllCourses, addNewCourse, deleteCourse } from '../../services';
+import { ADDCOURSE, DELETECOURSE, GETCOURSE } from './types';
 
-const intialState = getAllCourses();
+const intialCourseState = [];
 
-const courseReducer = (state = intialState, action) => {
-	if (action.type === 'ADDCOURSE') {
-		addToCourse(action.payload);
-		state = getAllCourses();
-		return state;
-	} else if (action.type === 'DELCOURSE') {
-		deleteCourse(action.payload);
-		state = getAllCourses();
-		return state;
-	} else {
-		return state;
+const courseReducer = (state = intialCourseState, action) => {
+	switch (action.type) {
+		case ADDCOURSE:
+			addNewCourse(action.payload);
+			state = getAllCourses();
+			return state;
+		case DELETECOURSE:
+			deleteCourse(action.payload);
+			state = getAllCourses();
+			return state;
+		case GETCOURSE:
+			state = getAllCourses();
+			return state;
+		default:
+			return state;
 	}
 };
 

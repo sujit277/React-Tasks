@@ -1,3 +1,5 @@
+import { ADDLOGINDATA, DELLOGINDATA } from './types';
+
 const userInitialState = {
 	isAuth: false,
 	name: '',
@@ -5,17 +7,18 @@ const userInitialState = {
 	token: '',
 };
 
-const userDataReducer = (state = userInitialState, action) => {
-	if (action.type === 'ADDLOGINDATA') {
-		state = action.payload;
-		console.log(state);
-		return state;
-	} else if (action.type === 'DELLOGINDATA') {
-		state = userInitialState;
-		return state;
-	} else {
-		return state;
+const userReducer = (state = userInitialState, action) => {
+	switch (action.type) {
+		case ADDLOGINDATA:
+			state = action.payload;
+			return state;
+		case DELLOGINDATA: {
+			state = userInitialState;
+			return state;
+		}
+		default:
+			return state;
 	}
 };
 
-export default userDataReducer;
+export default userReducer;

@@ -1,15 +1,16 @@
-import { addcrse, delcrse } from './types';
+import { ADDCOURSE, GETCOURSE, DELETECOURSE } from './types';
 
-export const delCourse = (Id) => {
-	return {
-		type: delcrse,
-		payload: Id,
-	};
+//Action for adding new course
+export const addCourse = (data) => {
+	return { type: ADDCOURSE, payload: data };
 };
 
-export const AddCourse = (courseData) => {
-	return {
-		type: addcrse,
-		payload: courseData,
-	};
+//Action for deleting specific course
+export const deleteCourse = (id) => {
+	return { type: DELETECOURSE, payload: id };
+};
+
+//Action for getting all courses
+export const getCourse = () => {
+	return { type: GETCOURSE };
 };

@@ -5,7 +5,7 @@ import Button from '../../../../Common/Button/Button';
 import { ShowCourse, updatebtn, deletebtn } from '../../../../Constants';
 import timeConvert from '../../../../Helpers/getCourseDuration';
 import convertDate from '../../../../Helpers/formatCreationDate';
-import { delCourse } from '../../../../Store/Courses/actions';
+import { deleteCourse } from '../../../../Store/Courses/actions';
 import { findAuthors } from './util';
 import './CourseCard.css';
 
@@ -17,13 +17,13 @@ const CourseCard = ({
 	title,
 	description,
 }) => {
-	const data = useSelector((state) => state.authorReducer);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const author = useSelector((state) => state.authorReducer);
 
-	const hrsvalue = timeConvert(duration);
+	const hoursvalue = timeConvert(duration);
 	const datevalue = convertDate(creationDate);
-	const authorvalue = findAuthors(authors, data);
+	const authorvalue = findAuthors(authors, author);
 
 	return (
 		<div className='row box2 mt-3 mb-3'>
@@ -38,7 +38,7 @@ const CourseCard = ({
 				</h5>
 				<h5>
 					Duration:
-					<span style={{ paddingLeft: '10px' }}>{hrsvalue}</span>
+					<span style={{ paddingLeft: '10px' }}>{hoursvalue}</span>
 				</h5>
 				<h5 className='mb-4'>
 					Created:
@@ -55,14 +55,10 @@ const CourseCard = ({
 					<Button
 						text={deletebtn}
 						cls={'btn btn-light mx-2'}
-						click={() => dispatch(delCourse(id))}
+						click={() => dispatch(deleteCourse(id))}
 					/>
-					<Button
-						text={updatebtn}
-						cls={'btn btn-light'}
-						click={() => dispatch(delCourse(id))}
-					/>
-					<i class='fa-solid fa-circle-trash'></i>
+					<Button text={updatebtn} cls={'btn btn-light'} />
+					<i className='fa-solid fa-circle-trash'></i>
 				</div>
 			</div>
 		</div>

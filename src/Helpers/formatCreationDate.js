@@ -1,3 +1,5 @@
+//Method for converting date from one format to another format
+
 const convertDate = (date) => {
 	if (!date) {
 		return '';

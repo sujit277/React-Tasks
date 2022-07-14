@@ -1,40 +1,43 @@
 import { React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
+import { login } from '../../services';
 import Button from '../../Common/Button/Button';
 import Input from '../../Common/Input/Input';
 import { addLoginData } from '../../Store/User/actions';
 
 const Login = () => {
-	const [Data, setData] = useState({
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const [formData, setFormData] = useState({
 		email: '',
 		password: '',
 	});
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
 
 	const handleInput = (event) => {
-		setData({ ...Data, [event.target.name]: event.target.value });
+		setFormData({ ...formData, [event.target.name]: event.target.value });
 	};
 
-	const login = () => {
-		axios.post('http://localhost:4000/login', Data).then((res) => {
-			console.log(res.data);
-			if (res.data.successful === true) {
-				alert('User Logined Successfully');
-				const userdata = {
-					isAuth: true,
-					name: res.data.user.name,
-					email: res.data.user.email,
-					token: res.data.result,
-				};
-				dispatch(addLoginData(userdata));
-				navigate('/courses');
-			} else {
-				navigate('/');
-			}
-		});
+	const submitLogin = () => {
+		login(formData)
+			.then((res) => {
+				if (res.status === 201) {
+					alert('User Logined Successfully');
+					const userdata = {
+						isAuth: true,
+						name: res.data.user.name,
+						email: res.data.user.email,
+						token: res.data.result,
+					};
+					localStorage.setItem('token', res.data.result);
+					localStorage.setItem('user', JSON.stringify(res.data.user));
+					dispatch(addLoginData(userdata));
+					navigate('/courses');
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	};
 
 	return (
@@ -78,7 +81,7 @@ const Login = () => {
 							/>
 						</div>
 						<div className='mb-3' style={{ textAlign: 'center' }}>
-							<Button text='Login' cls={'btn btn-light'} click={login} />
+							<Button text='Login' cls={'btn btn-light'} click={submitLogin} />
 						</div>
 						<div style={{ textAlign: 'center' }}>
 							if you have not an Account you can{' '}

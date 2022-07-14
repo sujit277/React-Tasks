@@ -1,4 +1,2 @@
-const addlogdata = 'ADDLOGINDATA';
-const dellogdata = 'DELLOGINDATA';
-
-export { addlogdata, dellogdata };
+export const ADDLOGINDATA = 'ADD_LOGIN_DATA';
+export const DELLOGINDATA = 'DEL_LOGIN_DATA';
